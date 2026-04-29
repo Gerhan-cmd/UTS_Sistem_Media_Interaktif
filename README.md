@@ -70,6 +70,6 @@ Dibuat oleh mahasiswa Informatika ✨
 
 ---
 
-## 📄 Lisensi
+## 📄 Live Demo
 
-Free to use for educational purposes.
+https://gerhan-cmd.github.io/UTS_Sistem_Media_Interaktif
