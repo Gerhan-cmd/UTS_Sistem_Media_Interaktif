@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tongkonan — Struktur Rumah Sakral</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================
+       CSS VARIABLES & RESET
+    ========================================= */
+    :root {
+      --cream:      #F5EDD8;
+      --parchment:  #EDE0C4;
+      --warm-white: #FAF6EE;
+      --red:        #8B1A1A;
+      --red-light:  #B83232;
+      --red-dark:   #5C0F0F;
+      --gold:       #C8922A;
+      --gold-light: #E5B84A;
+      --brown:      #4A2C0A;
+      --brown-mid:  #6B3E1A;
+      --brown-light:#A0622A;
+      --charcoal:   #2A1A08;
+      --shadow:     rgba(42,26,8,0.18);
+      --shadow-deep:rgba(42,26,8,0.35);
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Source Serif 4', Georgia, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--warm-white);
+      color: var(--charcoal);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* =========================================
+       TORAJA DECORATIVE PATTERN (reusable)
+    ========================================= */
+    .toraja-pattern {
+      background-image:
+        repeating-linear-gradient(45deg,  transparent, transparent 6px, rgba(200,146,42,0.15) 6px, rgba(200,146,42,0.15) 7px),
+        repeating-linear-gradient(-45deg, transparent, transparent 6px, rgba(139,26,26,0.1)  6px, rgba(139,26,26,0.1)  7px);
+    }
+
+    .divider-motif {
+      display: flex; align-items: center; gap: 12px;
+      margin: 0 auto 2rem;
+      max-width: 320px;
+    }
+    .divider-motif span { flex: 1; height: 1px; background: var(--gold); opacity: .5; }
+    .divider-motif svg { flex-shrink: 0; }
+
+    /* =========================================
+       NAVIGATION
+    ========================================= */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .9rem 2rem;
+      background: rgba(250,246,238,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(200,146,42,.3);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px var(--shadow); }
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--red-dark);
+      letter-spacing: .02em;
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--brown); transition: .3s; }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: var(--cream); flex-direction: column;
+      justify-content: center; align-items: center; gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--red-dark);
+      text-decoration: none;
+    }
+    .close-menu {
+      position: absolute; top: 1.5rem; right: 2rem;
+      font-size: 2rem; background: none; border: none;
+      color: var(--brown); cursor: pointer;
+    }
+
+    /* =========================================
+       HERO SECTION
+    ========================================= */
+    #hero {
+      min-height: 100vh;
+      background: var(--brown);
+      display: grid; place-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 7rem 2rem 4rem;
+    }
+
+    /* Background texture */
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,26,26,.35) 0%, transparent 70%),
+        repeating-linear-gradient(45deg,  transparent, transparent 18px, rgba(200,146,42,.07) 18px, rgba(200,146,42,.07) 19px),
+        repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(200,146,42,.05) 18px, rgba(200,146,42,.05) 19px);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .hero-text { color: var(--cream); }
+    .hero-eyebrow {
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+      color: #fff;
+    }
+    .hero-title em { color: var(--gold-light); font-style: italic; }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: rgba(245,237,216,.8);
+      max-width: 440px;
+      margin-bottom: 2rem;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .85rem 2rem;
+      background: var(--red);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      border-radius: 2px;
+      transition: background .25s, transform .2s, box-shadow .25s;
+      box-shadow: 0 4px 18px rgba(139,26,26,.5);
+    }
+    .btn-primary:hover {
+      background: var(--red-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(139,26,26,.5);
+    }
+    .btn-primary svg { transition: transform .2s; }
+    .btn-primary:hover svg { transform: translateX(4px); }
+
+    /* SVG Tongkonan Illustration */
+    .hero-illustration { display: flex; justify-content: center; align-items: center; }
+
+    .tongkonan-svg {
+      width: 100%;
+      max-width: 480px;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,.5));
+      animation: floatAnim 5s ease-in-out infinite;
+    }
+    @keyframes floatAnim {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    /* =========================================
+       SECTION COMMONS
+    ========================================= */
+    section { padding: 6rem 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .6rem;
+      text-align: center;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      text-align: center;
+      color: var(--red-dark);
+      margin-bottom: .8rem;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: var(--brown-mid);
+      max-width: 560px;
+      margin: 0 auto 3rem;
+      font-size: 1rem;
+    }
+
+    /* =========================================
+       INTERACTIVE STRUCTURE SECTION
+    ========================================= */
+    #structure { background: var(--cream); }
+
+    .structure-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    /* Interactive Image wrapper */
+    .tongkonan-interactive { position: relative; }
+    .tongkonan-image-wrapper { position: relative; display: inline-block; width: 100%; }
+    .tongkonan-interactive-image { display: block; width: 100%; height: auto; border-radius: 8px; }
+
+    /* Hotspot overlay container */
+    .hotspot-container {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%; height: 100%;
+    }
+
+    /* Individual hotspots */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(200, 146, 42, 0);
+      outline: none;
+      border-radius: 6px;
+      z-index: 10;
+    }
+
+    .hotspot::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background: var(--red-dark);
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      border-radius: 4px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .2s ease;
+      margin-bottom: 8px;
+      pointer-events: none;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .hotspot::after::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: var(--red-dark);
+    }
+
+    .hotspot:hover::after,
+    .hotspot.active::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .hotspot:hover {
+      background: rgba(200, 146, 42, 0.12);
+      outline: 2px solid rgba(200, 146, 42, 0.5);
+      outline-offset: 2px;
+      box-shadow: 
+        0 0 0 2px rgba(200, 146, 42, 0.2),
+        inset 0 0 12px rgba(200, 146, 42, 0.15);
+      transform: scale(1.02);
+    }
+
+    .hotspot.active {
+      background: rgba(200, 146, 42, 0.25);
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+      box-shadow: 
+        0 0 0 4px rgba(200, 146, 42, 0.3),
+        inset 0 0 16px rgba(200, 146, 42, 0.2),
+        0 0 20px rgba(200, 146, 42, 0.4);
+      transform: scale(1.03);
+      animation: pulseActive 2s infinite;
+    }
+
+    @keyframes pulseActive {
+      0%, 100% { outline-width: 3px; box-shadow: 0 0 0 4px rgba(200, 146, 42, 0.3), inset 0 0 16px rgba(200, 146, 42, 0.2), 0 0 20px rgba(200, 146, 42, 0.4); }
+      50% { outline-width: 4px; box-shadow: 0 0 0 6px rgba(200, 146, 42, 0.4), inset 0 0 20px rgba(200, 146, 42, 0.25), 0 0 28px rgba(200, 146, 42, 0.5); }
+    }
+
+    /* Hotspot positions (percentage-based for responsiveness) */
+    .hotspot-rattiang {
+      top: 5%;
+      left: 12%;
+      width: 70%;
+      height: 56%;
+    }
+
+    .hotspot-kale {
+      top: 63%;
+      left: 12%;
+      width: 70%;
+      height: 12%;
+    }
+
+    .hotspot-sulluk {
+      top: 75%;
+      left: 12%;
+      width: 70%;
+      height: 15%;
+    }
+
+    .hotspot:active { transform: scale(0.97); }
+
+    /* Clickable zone overlays */
+    .zone {
+      cursor: pointer;
+      transition: opacity .25s;
+    }
+    .zone:hover .zone-fill { opacity: 1; }
+    .zone-fill { opacity: 0; transition: opacity .25s; }
+    .zone-label-bg { transition: opacity .25s; }
+    .zone.active .zone-fill { opacity: 1; }
+    .zone.active .zone-label-bg { fill-opacity: 1; }
+
+    /* Info panel */
+    .info-panel {
+      position: sticky;
+      top: 6rem;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px var(--shadow);
+      overflow: hidden;
+      min-height: 360px;
+      display: flex; flex-direction: column;
+      border-top: 5px solid var(--red);
+    }
+    .info-panel-header {
+      padding: 1.6rem 1.8rem 1rem;
+      border-bottom: 1px solid var(--parchment);
+    }
+    .info-panel-part-tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .4rem;
+    }
+    .info-panel-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--red-dark);
+    }
+    .info-panel-subtitle {
+      font-size: .85rem;
+      color: var(--brown-light);
+      margin-top: .2rem;
+    }
+    .info-panel-body { padding: 1.6rem 1.8rem; flex: 1; }
+    .info-row {
+      margin-bottom: 1.2rem;
+      animation: fadeSlideIn .35s ease;
+    }
+    .info-row-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .25rem;
+    }
+    .info-row p { font-size: .95rem; color: var(--brown); }
+    .info-placeholder {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100%; padding: 3rem 2rem; text-align: center;
+      color: var(--brown-light);
+    }
+    .info-placeholder svg { margin-bottom: 1rem; opacity: .4; }
+    .info-placeholder p { font-size: .95rem; font-style: italic; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Part selector tabs */
+    .part-tabs {
+      display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .part-tab {
+      padding: .5rem 1rem;
+      border-radius: 2px;
+      border: 2px solid var(--parchment);
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--brown-mid);
+      transition: all .2s;
+    }
+    .part-tab:hover { border-color: var(--red-light); color: var(--red); }
+    .part-tab.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* =========================================
+       CARDS SECTION
+    ========================================= */
+    #cards { background: var(--warm-white); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform .3s, box-shadow .3s;
+      display: flex; flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px var(--shadow-deep);
+    }
+    .card-header {
+      padding: 1.6rem 1.6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .card-rattiang .card-header { background: linear-gradient(135deg, #4A2C0A 0%, #8B1A1A 100%); }
+    .card-rattiang .card-header::after { background: var(--gold); }
+    .card-kale    .card-header { background: linear-gradient(135deg, #6B3E1A 0%, #A0622A 100%); }
+    .card-kale    .card-header::after { background: var(--gold-light); }
+    .card-sulluk  .card-header { background: linear-gradient(135deg, #2A1A08 0%, #4A2C0A 100%); }
+    .card-sulluk  .card-header::after { background: var(--red-light); }
+
+    .card-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(255,255,255,.12);
+      position: absolute;
+      top: .5rem; right: 1rem;
+    }
+    .card-tag {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: .4rem;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+    }
+    .card-title-sub {
+      font-size: .8rem;
+      color: rgba(255,255,255,.7);
+      margin-top: .2rem;
+    }
+
+    .card-body { padding: 1.4rem 1.6rem; flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+    .card-row-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .2rem;
+    }
+    .card-row p { font-size: .9rem; color: var(--brown); }
+    .card-icon-row {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .7rem 1rem;
+      background: var(--parchment);
+      border-radius: 3px;
+      font-size: .85rem;
+      color: var(--brown-mid);
+    }
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+    footer {
+      background: var(--charcoal);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: rgba(245,237,216,.5);
+      font-size: .85rem;
+    }
+    footer strong { color: var(--gold-light); }
+
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-text { order: 2; }
+      .hero-illustration { order: 1; }
+      .hero-desc { margin: 0 auto 2rem; }
+      .structure-layout { grid-template-columns: 1fr; }
+      .info-panel { position: static; min-height: 280px; }
+      .cards-grid { grid-template-columns: 1fr; }
+
+      /* Adjust hotspots for tablet */
+      .hotspot-rattiang { top: 2%; left: 10%; width: 80%; height: 30%; }
+      .hotspot-kale { top: 32%; left: 15%; width: 70%; height: 32%; }
+      .hotspot-sulluk { top: 64%; left: 10%; width: 80%; height: 30%; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.2rem; }
+      .part-tabs { gap: .4rem; }
+      .part-tab { font-size: .75rem; padding: .45rem .8rem; }
+
+      /* Adjust hotspots for mobile */
+      .hotspot { border-width: 1.5px; }
+      .hotspot-rattiang { top: 2%; left: 5%; width: 90%; height: 28%; }
+      .hotspot-kale { top: 30%; left: 8%; width: 84%; height: 34%; }
+      .hotspot-sulluk { top: 64%; left: 5%; width: 90%; height: 30%; }
+    }
+
+    /* Fade in on scroll */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ===================== NAVIGATION ===================== -->
+<nav id="navbar">
+  <div class="nav-brand">Tongkonan</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Beranda</a></li>
+    <li><a href="#structure">Struktur</a></li>
+    <li><a href="#cards">Bagian</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-menu" id="closeMenu">✕</button>
+  <a href="#hero"      onclick="closeMobileMenu()">Beranda</a>
+  <a href="#structure" onclick="closeMobileMenu()">Struktur</a>
+  <a href="#cards"     onclick="closeMobileMenu()">Bagian</a>
+</div>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Arsitektur Tradisional Toraja</p>
+      <h1 class="hero-title">Struktur<br><em>Tongkonan</em></h1>
+      <p class="hero-desc">
+        Tongkonan adalah rumah leluhur tradisional masyarakat Toraja di Sulawesi Selatan, Indonesia.
+        Atapnya yang menjulang berbentuk perahu dan ukiran kaya mewakili kosmos yang terbagi menjadi tiga kerajaan suci —
+        setiap bagian membawa makna spiritual dan sosial yang mendalam.
+      </p>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="#structure" class="btn-primary">
+          Jelajahi Struktur
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="quiz.html" target="_blank" class="btn-primary" style="background: var(--gold);">
+          Ikuti Kuis
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-illustration">
+      <!-- Real Tongkonan Image -->
+      <img src="tongkonan-custom.jpg" alt="Tongkonan Traditional House" class="tongkonan-image" style="width: 100%; max-width: 500px; height: auto; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INTERACTIVE STRUCTURE SECTION ===================== -->
+<section id="structure">
+  <div class="section-inner">
+    <span class="section-label">Pembelajaran Interaktif</span>
+    <h2 class="section-title fade-in">Jelajahi Setiap Bagian</h2>
+    <p class="section-subtitle fade-in">Klik pada bagian di bawah — atau gunakan tombol — untuk mempelajari setiap bagian struktural Tongkonan.</p>
+
+    <div class="part-tabs fade-in">
+      <button class="part-tab" onclick="selectPart('rattiang')">① Rattiang Banua</button>
+      <button class="part-tab" onclick="selectPart('kale')">② Kale Banua</button>
+      <button class="part-tab" onclick="selectPart('sulluk')">③ Sulluk Banua</button>
+    </div>
+
+    <div class="structure-layout">
+      <!-- Clickable Image Tongkonan with Hotspots -->
+      <div class="tongkonan-interactive fade-in">
+        <div class="tongkonan-image-wrapper">
+          <img src="tongkonan-custom.jpg" alt="Interactive Tongkonan" class="tongkonan-interactive-image" usemap="#tongkonan-map">
+          
+          <!-- Interactive Hotspots Overlay -->
+          <div class="hotspot-container">
+            <!-- Hotspot: Rattiang Banua (Red Roof) -->
+            <div class="hotspot hotspot-rattiang" onclick="selectPart('rattiang')" data-tooltip="Rattiang Banua (Atap)"></div>
+            
+            <!-- Hotspot: Kale Banua (Main Body) -->
+            <div class="hotspot hotspot-kale" onclick="selectPart('kale')" data-tooltip="Kale Banua (Tubuh Utama)"></div>
+            
+            <!-- Hotspot: Sulluk Banua (Foundation) -->
+            <div class="hotspot hotspot-sulluk" onclick="selectPart('sulluk')" data-tooltip="Sulluk Banua (Fondasi)"></div>
+          </div>
+        </div>
+        <p style="text-align:center; font-size:.8rem; color:var(--brown-light); margin-top:.6rem; font-style:italic;">
+          ☝ Klik pada bagian manapun dari tongkonan untuk mempelajari lebih lanjut
+        </p>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="info-panel fade-in" id="infoPanel">
+        <div id="infoPlaceholder" class="info-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <p>Select a part of the Tongkonan above to see detailed information about it.</p>
+        </div>
+        <div id="infoContent" style="display:none; flex-direction:column; height:100%;">
+          <div class="info-panel-header">
+            <div class="info-panel-part-tag" id="infoTag"></div>
+            <div class="info-panel-title" id="infoTitle"></div>
+            <div class="info-panel-subtitle" id="infoSub"></div>
+          </div>
+          <div class="info-panel-body">
+            <div class="info-row">
+              <div class="info-row-label">Description</div>
+              <p id="infoDesc"></p>
+            </div>
+            <div class="info-row">
+              <div class="info-row-label">Function</div>
+              <p id="infoFunc"></p>
+            </div>
+            <div class="info-row">
+              <div class="info-row-label">Cultural Meaning</div>
+              <p id="infoCulture"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CARDS SECTION ===================== -->
+<section id="cards">
+  <div class="section-inner">
+    <span class="section-label">Tiga Bagian</span>
+    <h2 class="section-title fade-in">Panduan Referensi Lengkap</h2>
+    <p class="section-subtitle fade-in">Pandangan detail tentang ketiga elemen struktural rumah Tongkonan.</p>
+
+    <div class="cards-grid">
+      <!-- Card 1: Rattiang Banua -->
+      <div class="card card-rattiang fade-in">
+        <div class="card-header">
+          <div class="card-number">01</div>
+          <div class="card-tag">Dunia Atas</div>
+          <div class="card-title">Rattiang Banua</div>
+          <div class="card-title-sub">Atap Sakral</div>
+        </div>
+        <div class="card-body">
+          <div class="card-icon-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
+            <span>Berbentuk perahu, melengkung ke atas di kedua ujung</span>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Struktur</div>
+            <p>Atap melengkung secara dramatis ke atas di kedua ujungnya, menyerupai perahu atau tanduk kerbau air. Dibangun dari bambu atau lembaran logam dan memanjang jauh melampaui dinding untuk memberikan naungan dan perlindungan dari hujan.</p>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Fungsi</div>
+            <p>Melindungi rumah dari hujan tropis yang lebat dan matahari terik Sulawesi. Talang yang lebar mengalirkan air hujan menjauh dari fondasi.</p>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Makna Budaya</div>
+            <p>Mewakili <em>dunia atas</em> — kerajaan dewa dan leluhur. Bentuknya menyerupai perahu, melambangkan pelayaran leluhur dari utara. Dihiasi dengan motif merah, hitam, putih, dan kuning (ukiran motif Pa').</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Kale Banua -->
+      <div class="card card-kale fade-in">
+        <div class="card-header">
+          <div class="card-number">02</div>
+          <div class="card-tag">Dunia Tengah</div>
+          <div class="card-title">Kale Banua</div>
+          <div class="card-title-sub">Tubuh Hidup</div>
+        </div>
+        <div class="card-body">
+          <div class="card-icon-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <span>Dinding yang kaya ukiran dengan motif geometris</span>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Struktur</div>
+            <p>Tubuh utama rumah berisi ruang hidup. Dindingnya ditutupi ukiran geometris rumit (disebut <em>ukiran</em>) yang dicat merah, hitam, dan kuning — setiap pola membawa makna sosial atau spiritual tertentu.</p>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Fungsi</div>
+            <p>Berfungsi sebagai ruang hidup utama keluarga. Ruangan diatur dari utara ke selatan mengikuti urutan kosmologis. Sisi utara (alang sura') paling sakral, dicadangkan untuk tidur dan menyimpan pusaka.</p>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Makna Budaya</div>
+            <p>Mewakili <em>dunia tengah</em> — kerajaan orang hidup. Ukiran menceritakan kisah garis keturunan, kekayaan, dan status sosial keluarga. Hanya keluarga bangsawan (Tana' Bulaan) yang secara tradisional bisa membangun Tongkonan penuh.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Sulluk Banua -->
+      <div class="card card-sulluk fade-in">
+        <div class="card-header">
+          <div class="card-number">03</div>
+          <div class="card-tag">Dunia Bawah</div>
+          <div class="card-title">Sulluk Banua</div>
+          <div class="card-title-sub">Fondasi Sakral</div>
+        </div>
+        <div class="card-body">
+          <div class="card-icon-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="20"/><line x1="8" y1="20" x2="8" y2="8"/><line x1="16" y1="20" x2="16" y2="8"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
+            <span>Ditinggikan di atas tiang kayu di atas tanah</span>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Struktur</div>
+            <p>Rumah ditinggikan di atas tiang kayu tinggi (disebut <em>a'riri</em>), mengangkat lantai jauh di atas permukaan tanah. Ruang di bawahnya tertutup dan digunakan sebagai area penyimpanan atau kandang hewan.</p>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Fungsi</div>
+            <p>Menjaga rumah aman dari banjir, serangga, dan hewan liar. Desain yang ditinggikan juga memungkinkan udara bersirkulasi di bawah lantai, menjaga interior tetap sejuk. Secara tradisional digunakan untuk menyimpan alat pertanian dan ternak.</p>
+          </div>
+          <div class="card-row">
+            <div class="card-row-label">Makna Budaya</div>
+            <p>Mewakili <em>dunia bawah</em> — kerajaan orang yang telah meninggal dan roh di bawah bumi. Menjaga ruang hidup yang ditinggikan secara simbolis memisahkan dunia orang hidup dari dunia roh.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <p>Sumber belajar tentang <strong>Tongkonan</strong> — Rumah Leluhur Tradisional Masyarakat Toraja, Sulawesi Selatan, Indonesia.</p>
+  <p style="margin-top:.5rem; font-size:.78rem; opacity:.6;">Ujian Tengah Semester - Sistem Media Interaktif</p>
+</footer>
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+<script>
+  /* -----------------------------------------------
+     DATA: Parts information
+  ----------------------------------------------- */
+  const PARTS = {
+    rattiang: {
+      tag:     'Bagian 1 dari 3 · Dunia Atas',
+      title:   'Rattiang Banua',
+      sub:     'Atap Sakral',
+      desc:    'Atap berbentuk perahu yang dramatis yang melengkung ke atas di kedua ujungnya. Ini adalah fitur paling mencolok secara visual dari Tongkonan, dibangun dari bambu atau lembaran logam dengan talang yang lebar menjorok.',
+      func:    'Melindungi rumah dari hujan tropis Sulawesi yang lebat dan panas yang intens. Talang yang lebar mengalirkan air hujan jauh dari dinding dan fondasi, mencegah kerusakan air.',
+      culture: 'Mewakili dunia atas — kerajaan dewa dan leluhur dalam kosmologi Toraja. Bentuk perahunya melambangkan perjalanan leluhur dari utara. Permukaannya dihiasi dengan ukiran motif Pa\' dalam warna sakral: merah (kehidupan/darah), hitam (kematian/kegelapan), putih (kemurnian), dan kuning (kekuatan).',
+    },
+    kale: {
+      tag:     'Bagian 2 dari 3 · Dunia Tengah',
+      title:   'Kale Banua',
+      sub:     'Tubuh Hidup',
+      desc:    'Tubuh utama rumah yang berisi semua ruang hidup. Dindingnya sepenuhnya ditutupi dengan ukiran geometris yang mengidentifikasi garis keturunan dan status sosial keluarga.',
+      func:    'Menampung aktivitas hidup sehari-hari keluarga. Interior diatur oleh sumbu utara-selatan yang sakral: ujung utara paling sakral dan dicadangkan untuk tidur dan menyimpan pusaka leluhur; ujung selatan digunakan untuk memasak.',
+      culture: 'Mewakili dunia tengah — kerajaan orang hidup. Ukiran yang rumit bukan hanya dekoratif; setiap motif (seperti Pa\' Tedong, pola kerbau) mengkomunikasikan pangkat sosial dan keyakinan spiritual pemilik. Secara tradisional, hanya kelas bangsawan (Tana\' Bulaan) yang bisa membangun Tongkonan penuh.',
+    },
+    sulluk: {
+      tag:     'Bagian 3 dari 3 · Dunia Bawah',
+      title:   'Sulluk Banua',
+      sub:     'Fondasi Sakral',
+      desc:    'Sistem fondasi yang ditinggikan dari tiang kayu tinggi (a\'riri) yang mengangkat seluruh rumah di atas tanah. Ruang tertutup di bawahnya melayani tujuan praktis dan simbolis.',
+      func:    'Melindungi rumah dari banjir, serangga, dan hewan. Lantai yang ditinggikan memungkinkan sirkulasi udara dingin di bawah ruang hidup. Ruang bawah lantai menyimpan alat pertanian dan melindungi ternak.',
+      culture: 'Mewakili dunia bawah — kerajaan roh dan orang yang telah meninggal. Meninggikan ruang hidup secara simbolis memisahkan dunia orang hidup dari dunia roh di bawah. Struktur kosmik tiga tingkat ini (atap/tubuh/fondasi) mencerminkan pandangan Toraja tentang alam semesta sebagai tiga kerajaan yang saling terhubung.',
+    },
+  };
+
+  /* -----------------------------------------------
+     INTERACTIVE STRUCTURE: Part selection
+  ----------------------------------------------- */
+  function selectPart(partKey) {
+    // Update hotspot highlights
+    document.querySelectorAll('.hotspot').forEach(hotspot => {
+      hotspot.classList.remove('active');
+    });
+
+    // Highlight selected hotspot
+    const selectedHotspot = document.querySelector('.hotspot-' + partKey);
+    if (selectedHotspot) {
+      selectedHotspot.classList.add('active');
+    }
+
+    // Update tab buttons
+    document.querySelectorAll('.part-tab').forEach((btn, i) => {
+      const keys = ['rattiang','kale','sulluk'];
+      btn.classList.toggle('active', keys[i] === partKey);
+    });
+
+    // Update info panel
+    const data = PARTS[partKey];
+    document.getElementById('infoPlaceholder').style.display = 'none';
+    const content = document.getElementById('infoContent');
+    content.style.display = 'flex';
+
+    document.getElementById('infoTag').textContent     = data.tag;
+    document.getElementById('infoTitle').textContent   = data.title;
+    document.getElementById('infoSub').textContent     = data.sub;
+    document.getElementById('infoDesc').textContent    = data.desc;
+    document.getElementById('infoFunc').textContent    = data.func;
+    document.getElementById('infoCulture').textContent = data.culture;
+
+    // Update border color
+    const colors = { rattiang: '#8B1A1A', kale: '#A0622A', sulluk: '#4A2C0A' };
+    document.getElementById('infoPanel').style.borderTopColor = colors[partKey];
+  }
+
+  /* -----------------------------------------------
+     NAVIGATION
+  ----------------------------------------------- */
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.add('open');
+  });
+  document.getElementById('closeMenu').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.remove('open');
+  });
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  /* -----------------------------------------------
+     SCROLL ANIMATIONS
+  ----------------------------------------------- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Stagger siblings
+        const siblings = e.target.parentElement?.querySelectorAll('.fade-in');
+        if (siblings) {
+          siblings.forEach((el, i) => {
+            el.style.transitionDelay = (i * 0.1) + 's';
+          });
+        }
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
